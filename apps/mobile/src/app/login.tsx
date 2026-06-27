@@ -24,6 +24,8 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react-native";
+import { COLORS } from "@/constants/constants";
+import { Image } from "expo-image";
 
 interface LoginErrors {
   email?: string;
@@ -33,28 +35,10 @@ interface LoginErrors {
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PASSWORD_MIN_LENGTH = 6;
 
-const colors = {
-  primary: "#FF4B3A",
-  secondary: "#FF6B35",
-  white: "#ffffff",
-  bg: "#f8fafc",
-  text: {
-    primary: "#0f172a",
-    secondary: "#475569",
-    muted: "#64748b",
-  },
-  border: {
-    default: "#e2e8f0",
-    focused: "#FF4B3A",
-    error: "#ef4444",
-  },
-  icon: "#94a3b8",
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: COLORS.white,
   },
   contentContainer: {
     flexGrow: 1,
@@ -72,12 +56,11 @@ const styles = StyleSheet.create({
   iconBox: {
     width: 80,
     height: 80,
-    backgroundColor: colors.primary,
     borderRadius: 24,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 24,
-    shadowColor: colors.primary,
+    shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.4,
     shadowRadius: 10,
@@ -86,12 +69,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     fontWeight: "800",
-    color: colors.text.primary,
+    color: COLORS.text.primary,
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: colors.text.muted,
+    color: COLORS.text.muted,
   },
   formSection: {
     gap: 24,
@@ -102,7 +85,7 @@ const styles = StyleSheet.create({
   fieldLabel: {
     fontSize: 14,
     fontWeight: "600",
-    color: colors.text.secondary,
+    color: COLORS.text.secondary,
     marginLeft: 4,
   },
   inputContainer: {
@@ -110,7 +93,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     height: 56,
-    backgroundColor: colors.bg,
+    backgroundColor: COLORS.bg,
     borderRadius: 12,
     paddingHorizontal: 16,
     flexDirection: "row",
@@ -119,16 +102,16 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
-    color: colors.text.primary,
+    color: COLORS.text.primary,
     marginLeft: 12,
     padding: 0,
   },
   inputDisabled: {
-    color: colors.text.muted,
+    color: COLORS.text.muted,
   },
   errorText: {
     fontSize: 12,
-    color: colors.border.error,
+    color: COLORS.border.error,
     marginLeft: 4,
     fontWeight: "500",
   },
@@ -139,7 +122,7 @@ const styles = StyleSheet.create({
   forgotText: {
     fontSize: 14,
     fontWeight: "600",
-    color: colors.primary,
+    color: COLORS.primary,
   },
   dividerContainer: {
     flexDirection: "row",
@@ -149,11 +132,11 @@ const styles = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: colors.border.default,
+    backgroundColor: COLORS.border.default,
   },
   dividerText: {
     marginHorizontal: 16,
-    color: colors.text.muted,
+    color: COLORS.text.muted,
     fontWeight: "500",
   },
   socialContainer: {
@@ -166,11 +149,11 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   footerText: {
-    color: colors.text.muted,
+    color: COLORS.text.muted,
     fontSize: 16,
   },
   registerText: {
-    color: colors.primary,
+    color: COLORS.primary,
     fontSize: 16,
     fontWeight: "700",
   },
@@ -190,15 +173,15 @@ export default function LoginScreen() {
   const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const getBorderColor = (field: string, hasError: boolean): string => {
-    if (hasError) return colors.border.error;
-    if (focusedField === field) return colors.border.focused;
-    return colors.border.default;
+    if (hasError) return COLORS.border.error;
+    if (focusedField === field) return COLORS.border.focused;
+    return COLORS.border.default;
   };
 
   const getIconColor = (field: string, hasError: boolean): string => {
-    if (hasError) return colors.border.error;
-    if (focusedField === field) return colors.primary;
-    return colors.icon;
+    if (hasError) return COLORS.border.error;
+    if (focusedField === field) return COLORS.primary;
+    return COLORS.icon;
   };
 
   const validateForm = (): boolean => {
@@ -291,7 +274,15 @@ export default function LoginScreen() {
             {/* Header */}
             <View style={styles.headerSection}>
               <View style={styles.iconBox}>
-                <LogIn color={colors.white} size={40} />
+                <Image
+                  source={require("../../assets/images/Hattionlineinstagramlogo.png")}
+                  style={{
+                    width: 100,
+                    height: 100,
+                    marginTop: 12,
+                    borderRadius: 10,
+                  }}
+                />
               </View>
               <Text style={styles.title}>Welcome Back</Text>
               <Text style={styles.subtitle}>Sign in to continue</Text>
@@ -315,7 +306,7 @@ export default function LoginScreen() {
                   <TextInput
                     style={[styles.input, isLoading && styles.inputDisabled]}
                     placeholder="example@mail.com"
-                    placeholderTextColor={colors.icon}
+                    placeholderTextColor={COLORS.icon}
                     value={loginState.email}
                     onChangeText={handleEmailChange}
                     onFocus={() => setFocusedField("email")}
@@ -351,7 +342,7 @@ export default function LoginScreen() {
                   <TextInput
                     style={[styles.input, isLoading && styles.inputDisabled]}
                     placeholder="Enter your password"
-                    placeholderTextColor={colors.icon}
+                    placeholderTextColor={COLORS.icon}
                     value={loginState.password}
                     onChangeText={handlePasswordChange}
                     onFocus={() => setFocusedField("password")}
@@ -364,9 +355,9 @@ export default function LoginScreen() {
                     disabled={isLoading}
                   >
                     {showPassword ? (
-                      <EyeOff size={20} color={colors.icon} />
+                      <EyeOff size={20} color={COLORS.icon} />
                     ) : (
-                      <Eye size={20} color={colors.icon} />
+                      <Eye size={20} color={COLORS.icon} />
                     )}
                   </Pressable>
                 </View>
@@ -389,7 +380,7 @@ export default function LoginScreen() {
                 style={[
                   styles.inputContainer,
                   {
-                    backgroundColor: colors.primary,
+                    backgroundColor: COLORS.primary,
                     borderWidth: 0,
                     marginTop: 16,
                   },
@@ -398,11 +389,11 @@ export default function LoginScreen() {
                 disabled={isLoading}
               >
                 {isLoading ? (
-                  <ActivityIndicator color={colors.white} size={20} />
+                  <ActivityIndicator color={COLORS.white} size={20} />
                 ) : (
                   <Text
                     style={{
-                      color: colors.white,
+                      color: COLORS.white,
                       fontSize: 16,
                       fontWeight: "600",
                     }}
@@ -425,15 +416,15 @@ export default function LoginScreen() {
               <Pressable
                 style={[
                   styles.inputContainer,
-                  { flex: 1, backgroundColor: colors.white, gap: 8 },
+                  { flex: 1, backgroundColor: COLORS.white, gap: 8 },
                 ]}
                 onPress={() => handleSocialLogin("Google")}
                 disabled={isLoading}
               >
-                <Globe size={20} color={colors.text.secondary} />
+                <Globe size={20} color={COLORS.text.secondary} />
                 <Text
                   style={{
-                    color: colors.text.secondary,
+                    color: COLORS.text.secondary,
                     fontSize: 16,
                     fontWeight: "600",
                   }}
@@ -445,15 +436,15 @@ export default function LoginScreen() {
               <Pressable
                 style={[
                   styles.inputContainer,
-                  { flex: 1, backgroundColor: colors.white, gap: 8 },
+                  { flex: 1, backgroundColor: COLORS.white, gap: 8 },
                 ]}
                 onPress={() => handleSocialLogin("GitHub")}
                 disabled={isLoading}
               >
-                <User size={20} color={colors.text.secondary} />
+                <User size={20} color={COLORS.text.secondary} />
                 <Text
                   style={{
-                    color: colors.text.secondary,
+                    color: COLORS.text.secondary,
                     fontSize: 16,
                     fontWeight: "600",
                   }}

@@ -11,11 +11,136 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   ScrollView,
+  StyleSheet,
 } from "react-native";
-
 import { router } from "expo-router";
 import { UserRole } from "@food-delivery-app/types";
 import { useAuth } from "@/context/auth-context";
+import { COLORS } from "@/constants/constants";
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.white,
+  },
+  contentContainer: {
+    paddingBottom: 40,
+    paddingHorizontal: 24,
+    paddingTop: 64,
+  },
+  headerSection: {
+    marginBottom: 32,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: "800",
+    color: COLORS.text.primary,
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 18,
+    color: COLORS.text.muted,
+  },
+  formSection: {
+    gap: 20,
+  },
+  // Name Fields Row
+  nameRow: {
+    flexDirection: "row",
+    gap: 12,
+  },
+  nameField: {
+    flex: 1,
+    gap: 8,
+  },
+  fieldLabel: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: COLORS.text.secondary,
+    marginLeft: 4,
+  },
+  input: {
+    height: 56,
+    backgroundColor: COLORS.bg,
+    borderRadius: 16,
+    paddingHorizontal: 20,
+    fontSize: 16,
+    color: COLORS.text.primary,
+    borderWidth: 1,
+    borderColor: COLORS.border.default,
+  },
+  fieldContainer: {
+    gap: 8,
+  },
+  // Role Selection
+  roleSection: {
+    gap: 12,
+    marginTop: 4,
+  },
+  roleContainer: {
+    flexDirection: "row",
+    gap: 12,
+  },
+  roleButton: {
+    flex: 1,
+    height: 48,
+    borderRadius: 12,
+    borderWidth: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: COLORS.bg,
+    borderColor: COLORS.border.default,
+  },
+  roleButtonActive: {
+    backgroundColor: `${COLORS.primary}15`, // 15% opacity
+    borderColor: COLORS.primary,
+  },
+  roleButtonText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: COLORS.text.muted,
+  },
+  roleButtonTextActive: {
+    color: COLORS.primary,
+  },
+  // Submit Button
+  submitButton: {
+    height: 56,
+    backgroundColor: COLORS.primary,
+    borderRadius: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 12,
+    shadowColor: COLORS.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  submitButtonDisabled: {
+    opacity: 0.8,
+  },
+  submitButtonText: {
+    color: COLORS.white,
+    fontSize: 18,
+    fontWeight: "700",
+  },
+  // Footer
+  footerContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 32,
+  },
+  footerText: {
+    color: COLORS.text.muted,
+    fontSize: 16,
+  },
+  footerLink: {
+    color: COLORS.primary,
+    fontSize: 16,
+    fontWeight: "700",
+  },
+});
 
 export default function RegisterScreen() {
   const { register } = useAuth();
@@ -43,7 +168,9 @@ export default function RegisterScreen() {
     } catch (error) {
       Alert.alert(
         "Registration Error",
-        "Something went wrong. Please try again.",
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again.",
       );
     } finally {
       setIsLoading(false);
@@ -53,135 +180,136 @@ export default function RegisterScreen() {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1 bg-white"
+      style={styles.container}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView
-          contentContainerStyle={{ paddingBottom: 40 }}
-          className="flex-1 px-6 pt-16"
+          contentContainerStyle={styles.contentContainer}
           showsVerticalScrollIndicator={false}
         >
-          <View className="mb-8">
-            <Text className="text-4xl font-extrabold text-slate-900 mb-2">
-              Create Account
-            </Text>
-            <Text className="text-lg text-slate-500">
+          {/* Header */}
+          <View style={styles.headerSection}>
+            <Text style={styles.title}>Create Account</Text>
+            <Text style={styles.subtitle}>
               Join our food delivery community
             </Text>
           </View>
 
-          <View className="gap-5">
-            <View className="flex-row gap-3">
-              <View className="flex-1 gap-2">
-                <Text className="text-sm font-semibold text-slate-700 ml-1">
-                  First Name
-                </Text>
+          {/* Form */}
+          <View style={styles.formSection}>
+            {/* Name Fields */}
+            <View style={styles.nameRow}>
+              <View style={styles.nameField}>
+                <Text style={styles.fieldLabel}>First Name</Text>
                 <TextInput
-                  className="h-14 bg-slate-50 rounded-2xl px-5 text-base text-slate-900 border border-slate-100"
+                  style={styles.input}
                   placeholder="John"
-                  placeholderTextColor="#94a3b8"
+                  placeholderTextColor={COLORS.text.muted}
                   onChangeText={(text) =>
                     setRegisterState({ ...registerState, firstName: text })
                   }
                   value={registerState.firstName}
+                  editable={!isLoading}
                 />
               </View>
-              <View className="flex-1 gap-2">
-                <Text className="text-sm font-semibold text-slate-700 ml-1">
-                  Last Name
-                </Text>
+              <View style={styles.nameField}>
+                <Text style={styles.fieldLabel}>Last Name</Text>
                 <TextInput
-                  className="h-14 bg-slate-50 rounded-2xl px-5 text-base text-slate-900 border border-slate-100"
+                  style={styles.input}
                   placeholder="Doe"
-                  placeholderTextColor="#94a3b8"
+                  placeholderTextColor={COLORS.text.muted}
                   onChangeText={(text) =>
                     setRegisterState({ ...registerState, lastName: text })
                   }
                   value={registerState.lastName}
+                  editable={!isLoading}
                 />
               </View>
             </View>
 
-            <View className="gap-2">
-              <Text className="text-sm font-semibold text-slate-700 ml-1">
-                Email Address
-              </Text>
+            {/* Email */}
+            <View style={styles.fieldContainer}>
+              <Text style={styles.fieldLabel}>Email Address</Text>
               <TextInput
-                className="h-14 bg-slate-50 rounded-2xl px-5 text-base text-slate-900 border border-slate-100"
+                style={styles.input}
                 placeholder="example@mail.com"
-                placeholderTextColor="#94a3b8"
+                placeholderTextColor={COLORS.text.muted}
                 onChangeText={(text) =>
                   setRegisterState({ ...registerState, email: text })
                 }
                 value={registerState.email}
                 autoCapitalize="none"
                 keyboardType="email-address"
+                editable={!isLoading}
               />
             </View>
 
-            <View className="gap-2">
-              <Text className="text-sm font-semibold text-slate-700 ml-1">
-                Password
-              </Text>
+            {/* Password */}
+            <View style={styles.fieldContainer}>
+              <Text style={styles.fieldLabel}>Password</Text>
               <TextInput
-                className="h-14 bg-slate-50 rounded-2xl px-5 text-base text-slate-900 border border-slate-100"
+                style={styles.input}
                 placeholder="••••••••"
-                placeholderTextColor="#94a3b8"
+                placeholderTextColor={COLORS.text.muted}
                 onChangeText={(text) =>
                   setRegisterState({ ...registerState, password: text })
                 }
                 value={registerState.password}
                 secureTextEntry
+                editable={!isLoading}
               />
             </View>
 
-            <View className="gap-3 mt-1">
-              <Text className="text-sm font-semibold text-slate-700 ml-1">
-                Register as:
-              </Text>
-              <View className="flex-row gap-3">
+            {/* Role Selection */}
+            <View style={styles.roleSection}>
+              <Text style={styles.fieldLabel}>Register as:</Text>
+              <View style={styles.roleContainer}>
                 <Pressable
-                  className={`flex-1 h-12 rounded-xl border justify-center items-center ${
-                    registerState.role === UserRole.CUSTOMER
-                      ? "bg-[#FF4B3A10] border-[#FF4B3A]"
-                      : "bg-slate-50 border-slate-100"
-                  }`}
+                  style={[
+                    styles.roleButton,
+                    registerState.role === UserRole.CUSTOMER &&
+                      styles.roleButtonActive,
+                  ]}
                   onPress={() =>
                     setRegisterState({
                       ...registerState,
                       role: UserRole.CUSTOMER,
                     })
                   }
+                  disabled={isLoading}
                 >
                   <Text
-                    className={`text-sm font-semibold ${
-                      registerState.role === UserRole.CUSTOMER
-                        ? "text-[#FF4B3A]"
-                        : "text-slate-500"
-                    }`}
+                    style={[
+                      styles.roleButtonText,
+                      registerState.role === UserRole.CUSTOMER &&
+                        styles.roleButtonTextActive,
+                    ]}
                   >
                     Customer
                   </Text>
                 </Pressable>
+
+                {/* Uncomment when ready */}
                 {/* <Pressable
-                  className={`flex-1 h-12 rounded-xl border justify-center items-center ${
-                    registerState.role === UserRole.RESTAURANT_OWNER
-                      ? "bg-[#FF4B3A10] border-[#FF4B3A]"
-                      : "bg-slate-50 border-slate-100"
-                  }`}
+                  style={[
+                    styles.roleButton,
+                    registerState.role === UserRole.RESTAURANT_OWNER &&
+                      styles.roleButtonActive,
+                  ]}
                   onPress={() =>
                     setRegisterState({
                       ...registerState,
                       role: UserRole.RESTAURANT_OWNER,
                     })
                   }
+                  disabled={isLoading}
                 >
                   <Text
-                    className={`text-sm font-semibold ${
-                      registerState.role === UserRole.RESTAURANT_OWNER
-                        ? "text-[#FF4B3A]"
-                        : "text-slate-500"
-                    }`}
+                    style={[
+                      styles.roleButtonText,
+                      registerState.role === UserRole.RESTAURANT_OWNER &&
+                        styles.roleButtonTextActive,
+                    ]}
                   >
                     Restaurant
                   </Text>
@@ -189,27 +317,31 @@ export default function RegisterScreen() {
               </View>
             </View>
 
+            {/* Submit Button */}
             <Pressable
               onPress={handleRegister}
               disabled={isLoading}
-              className={`h-14 bg-[#FF4B3A] rounded-2xl justify-center items-center mt-3 shadow-lg shadow-[#FF4B3A]/30 ${
-                isLoading ? "opacity-80" : ""
-              }`}
+              style={[
+                styles.submitButton,
+                isLoading && styles.submitButtonDisabled,
+              ]}
             >
               {isLoading ? (
-                <ActivityIndicator color={"#fff"} />
+                <ActivityIndicator color={COLORS.white} size="large" />
               ) : (
-                <Text className="text-white text-lg font-bold">Sign Up</Text>
+                <Text style={styles.submitButtonText}>Sign Up</Text>
               )}
             </Pressable>
           </View>
 
-          <View className="flex-row justify-center mt-8">
-            <Text className="text-slate-500 text-base">
-              Already have an account?{" "}
-            </Text>
-            <Pressable onPress={() => router.push("/login")}>
-              <Text className="text-[#FF4B3A] text-base font-bold">Login</Text>
+          {/* Footer */}
+          <View style={styles.footerContainer}>
+            <Text style={styles.footerText}>Already have an account? </Text>
+            <Pressable
+              onPress={() => router.push("/login")}
+              disabled={isLoading}
+            >
+              <Text style={styles.footerLink}>Login</Text>
             </Pressable>
           </View>
         </ScrollView>
