@@ -1,4 +1,5 @@
 import { useAuth } from "@/context/auth-context";
+import { Redirect } from "expo-router";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 export default function CustomerHome() {

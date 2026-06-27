@@ -1,6 +1,7 @@
 import { deleteToken, getToken } from "@/lib/auth";
 import axiosInstance from "@/lib/axios";
 import { User, UserRole } from "@food-delivery-app/types";
+import { router } from "expo-router";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextType {
@@ -80,6 +81,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = async () => {
     await deleteToken();
     setUser(null);
+    router.replace("/login");
   };
 
   return (
@@ -90,7 +92,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     </AuthContext.Provider>
   );
 }
-
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
